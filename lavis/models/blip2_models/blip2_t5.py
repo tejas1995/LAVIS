@@ -168,6 +168,7 @@ class Blip2T5(Blip2Base):
         length_penalty=1.0,
         num_captions=1,
         temperature=1,
+        **kwargs
     ):
         """
         Args:
@@ -229,20 +230,21 @@ class Blip2T5(Blip2Base):
                 inputs_embeds=inputs_embeds,
                 attention_mask=encoder_atts,
                 do_sample=use_nucleus_sampling,
-                top_p=top_p,
-                temperature=temperature,
+                #top_p=top_p,
+                #temperature=temperature,
                 num_beams=num_beams,
                 max_new_tokens=max_length,
                 min_length=min_length,
                 repetition_penalty=repetition_penalty,
                 length_penalty=length_penalty,
                 num_return_sequences=num_captions,
+                **kwargs
             )
             output_text = self.t5_tokenizer.batch_decode(
-                outputs, skip_special_tokens=True
+                outputs.sequences, skip_special_tokens=True
             )
 
-        return output_text
+        return output_text, outputs
 
     def predict_answers(
         self,
